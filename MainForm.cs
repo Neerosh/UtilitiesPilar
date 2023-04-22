@@ -19,8 +19,8 @@ namespace UtilitiesPilar
 {
     public partial class MainForm : Form
     {
-        private Process processTTDS;
-        private Process processSqlAnywhere;
+        private ProcessUtil processTTDS;
+        private ProcessUtil processSqlAnywhere;
         private Tool toolTTDS;
         private Tool toolSqlAnywhere;
         private Classes.Database database = new Classes.Database();
@@ -32,6 +32,8 @@ namespace UtilitiesPilar
         }
 
         private void InitializeWindow() {
+            processTTDS = new ProcessUtil();
+            processSqlAnywhere = new ProcessUtil();
             toolTTDS = database.SelectTool("TTDS");
             toolSqlAnywhere = database.SelectTool("SQL Anywhere");
             Task.Run(() => { VerifyProcessStatus(); });
@@ -51,10 +53,8 @@ namespace UtilitiesPilar
                 txtDescriptionSqlAnywhere.Text = toolSqlAnywhere.Description;
                 txtFilePathSqlAnywhere.Text = toolSqlAnywhere.FilePath;
             }
-
             btStartTTDS_Click(this, new EventArgs());
             btStartSqlAnywhere_Click(this, new EventArgs());
-
         }
 
         private string SelectFile()
@@ -70,38 +70,6 @@ namespace UtilitiesPilar
             return returnValue;
         }
 
-        private Process StartProcess(string filepath)
-        {
-            Process process = null;
-            if (File.Exists(filepath))
-            {
-                process = Process.Start(filepath);
-            }
-            return process;
-        }
-
-        private bool KillProcess(Process process)
-        {
-            if (!process.HasExited)
-                process.Kill();
-            return process.HasExited;
-        }
-
-        private string CheckStatusProcess(Process process) 
-        {
-            string status = "Process Not Found";
-
-            if (process.Id !=  0) 
-            {
-                if (process.HasExited)
-                    status = "Process Terminated";
-                if (!process.HasExited)
-                    status = "Process Running";
-            }
-
-            return status;
-        }
-
         private void VerifyProcessStatus()
         { 
             string statusTTDS;
@@ -110,33 +78,26 @@ namespace UtilitiesPilar
             while (status == 0)
             {
                 Thread.Sleep(3000);
-                if (processTTDS != null)
+                if (processTTDS.HasStarted())
                 {
-                    if (processTTDS.StartInfo.FileName != "")
+                    statusTTDS = processTTDS.CheckStatusProcess();
+                    if (statusTTDS != lbStatusTTDS.Text)
                     {
-                        statusTTDS = CheckStatusProcess(processTTDS);
-                        if (statusTTDS != lbStatusTTDS.Text)
-                        {
-                            Invoke((new Action(() => {
-                                DisplayProcessInfo(statusTTDS, "TTDS");
-                            })));
-                        }
-                            
-
+                        Invoke((new Action(() => {
+                            DisplayProcessInfo(statusTTDS, "TTDS");
+                        })));
                     }
+                          
                 }
 
-                if (processSqlAnywhere != null)
+                if (processSqlAnywhere.HasStarted())
                 {
-                    if (processSqlAnywhere.StartInfo.FileName != "")
+                    statusSqlAnywhere = processSqlAnywhere.CheckStatusProcess();
+                    if (statusSqlAnywhere != lbStatusSqlAnywhere.Text)
                     {
-                        statusSqlAnywhere = CheckStatusProcess(processSqlAnywhere);
-                        if (statusSqlAnywhere != lbStatusSqlAnywhere.Text)
-                        {
-                            Invoke((new Action(() => {
-                                DisplayProcessInfo(statusSqlAnywhere, "SQL Anywhere");
-                            })));
-                        }
+                        Invoke((new Action(() => {
+                            DisplayProcessInfo(statusSqlAnywhere, "SQL Anywhere");
+                        })));
                     }
                 }
             }
@@ -148,7 +109,7 @@ namespace UtilitiesPilar
             System.Windows.Forms.Label lbProcessId = new System.Windows.Forms.Label();
             System.Windows.Forms.Button btProcess = new System.Windows.Forms.Button();
 
-            Process process = null;
+            ProcessUtil process = null;
 
             switch (processName)
             {
@@ -167,7 +128,7 @@ namespace UtilitiesPilar
             }
 
             lbStatus.Text = status;
-            lbProcessId.Text = process.Id.ToString();
+            lbProcessId.Text = process.GetProcessId().ToString();
 
             if (lbStatus.Text.Contains("Terminated"))
             {
@@ -201,31 +162,31 @@ namespace UtilitiesPilar
 
         private void btStartTTDS_Click(object sender, EventArgs e)
         {
-            if (btStartTTDS.Text.Contains("Start"))
+            if (btStartTTDS.Text.Contains("Start") && File.Exists(txtFilePathTTDS.Text))
             {
-                processTTDS = StartProcess(txtFilePathTTDS.Text);
-                if (processTTDS != null)
-                    btStartTTDS.Text = "Stop TTDS";
+                processTTDS.StartProcess(txtFilePathTTDS.Text);
+                if (processTTDS.HasStarted())
+                    btStartTTDS.Text = btStartTTDS.Text.Replace("Start", "Stop");
             }
             else
             {
-                KillProcess(processTTDS);
-                btStartTTDS.Text = "Start TTDS";
+                processTTDS.KillProcess();
+                btStartTTDS.Text = btStartTTDS.Text.Replace("Stop", "Start");
             }
         }
 
         private void btStartSqlAnywhere_Click(object sender, EventArgs e)
         {
-            if (btStartSqlAnywhere.Text.Contains("Start"))
+            if (btStartSqlAnywhere.Text.Contains("Start") && File.Exists(txtFilePathSqlAnywhere.Text))
             {
-                processSqlAnywhere = StartProcess(txtFilePathSqlAnywhere.Text);
-                if (processSqlAnywhere != null)
-                    btStartSqlAnywhere.Text = "Stop TTDS";
+                processSqlAnywhere.StartProcess(txtFilePathSqlAnywhere.Text);
+                if (processSqlAnywhere.HasStarted())
+                    btStartSqlAnywhere.Text = btStartSqlAnywhere.Text.Replace("Start", "Stop");
             }
             else
             {
-                KillProcess(processSqlAnywhere);
-                btStartSqlAnywhere.Text = "Start TTDS";
+                processSqlAnywhere.KillProcess();
+                btStartSqlAnywhere.Text = btStartSqlAnywhere.Text.Replace("Stop", "Start");
             }
         }
 

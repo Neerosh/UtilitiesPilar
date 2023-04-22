@@ -66,6 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Database.cs" />
+    <Compile Include="Classes\FileFilter.cs" />
+    <Compile Include="Classes\FileFilterCondition.cs" />
+    <Compile Include="Classes\ProcessUtil.cs" />
     <Compile Include="Classes\Tool.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
