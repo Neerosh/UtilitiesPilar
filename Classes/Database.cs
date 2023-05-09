@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.ComponentModel;
 
 namespace UtilitiesPilar.Classes
 {
@@ -33,13 +34,26 @@ namespace UtilitiesPilar.Classes
                                 Description VARCHAR(100) NOT NULL,
                                 UNIQUE (Name)
                             );
-                            CREATE TABLE IF NOT EXISTS FileFilterCondition (
+                            CREATE TABLE IF NOT EXISTS FileFilterConditions (
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
+                                Name VARCHAR(50) NOT NULL,
                                 Type Varchar(30) NOT NULL,                      
                                 Condition Varchar(1000) NOT NULL,
                                 FileExtension Varchar(30) NOT NULL,
                                 UNIQUE (FileFilterId,Type,Condition,FileExtension),
+                                FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
+                            );
+                            CREATE TABLE IF NOT EXISTS FileFilterSettings (
+                                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                FileFilterId INTEGER NOT NULL,
+                                Name VARCHAR(50) NOT NULL,
+                                FolderOrigin Varchar(1000) NOT NULL,                      
+                                FolderDestination Varchar(1000) NOT NULL,
+                                ZipFilename Varchar(100) NOT NULL,
+                                ZipFiles Boolean NOT NULL,
+                                OverwriteFiles Boolean NOT NULL,
+                                UNIQUE (Id),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );";
 
@@ -105,6 +119,38 @@ namespace UtilitiesPilar.Classes
             }
         }
 
+        public BindingList<FileFilter> SelectAllFileFilters( int? fileFilterId)
+        {
+            BindingList<FileFilter> fileFilters = new BindingList<FileFilter>();
+            SQLiteDataReader reader = null;
+            string command = @"SELECT * FROM FileFilters";
+            if (fileFilterId != null)
+                command += " WHERE Id = " + fileFilterId;
+
+            try
+            {
+                reader = RunCommandNonQueryReader(command);
+                while (reader.Read())
+                {
+                    FileFilter fileFilter = new FileFilter(reader.GetInt32(0), reader.GetString(1),
+                        reader.GetString(2));
+                    fileFilters.Add(fileFilter);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SelectAll FileFilters", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                connection.Close();
+            }
+            return fileFilters;
+        }
+
         public FileFilter SelectFileFilter(string name)
         {
             FileFilter fileFilter = null;
@@ -141,12 +187,12 @@ namespace UtilitiesPilar.Classes
             }
         }
 
-        public List<FileFilterCondition> SelectAllFileFilterContions(int? fileFilterId) 
+        public List<FileFilterCondition> SelectAllFileFilterConditions(int? fileFilterId) 
         {
             List<FileFilterCondition> fileFilterConditions = new List<FileFilterCondition>();
             SQLiteDataReader reader = null;
             string command = @"SELECT * FROM FileFilterConditions";
-            if (fileFilterConditions != null)
+            if (fileFilterId != null)
                 command += " WHERE fileFilterId = " + fileFilterId;
 
             try
@@ -182,6 +228,44 @@ namespace UtilitiesPilar.Classes
                 MessageBox.Show(executionResult, "Update/Create FileFilterCondition", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public FileFilterSetting SelectFileFilterSetting(string name)
+        {
+            FileFilterSetting fileFilterSetting = null;
+            SQLiteDataReader reader = null;
+            string command = @"SELECT * FROM FileFilterSettings WHERE id = 0";
+            try
+            {
+                reader = RunCommandNonQueryReader(command);
+                while (reader.Read())
+                {
+                    fileFilterSetting = new FileFilterSetting(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3),
+                        reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetBoolean(7));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Select FileFilterSetting", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+
+                connection.Close();
+            }
+            return fileFilterSetting;
+        }
+        public void UpdateFileFilterSetting(FileFilterSetting fileFilterSetting)
+        {
+            string executionResult = RunCommandInsertOrUpdate(fileFilterSetting.SqlKeyValues(), fileFilterSetting.SqlKeyValuesWhere(), "fileFilterSettings");
+
+            if (executionResult.Contains("Error"))
+            {
+                MessageBox.Show(executionResult, "Update/Create fileFilterSetting", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private string RunCommandNonQuery(string commandText)
         {

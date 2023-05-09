@@ -53,17 +53,19 @@
             this.txtDescriptionTTDS = new System.Windows.Forms.TextBox();
             this.btUpdateDatabase = new System.Windows.Forms.Button();
             this.gbFilterFiles = new System.Windows.Forms.GroupBox();
-            this.lbFolderPath = new System.Windows.Forms.Label();
+            this.btFilterFiles = new System.Windows.Forms.Button();
+            this.txtZipFilename = new System.Windows.Forms.TextBox();
+            this.lbZipFilename = new System.Windows.Forms.Label();
+            this.btSelectFolderSaveTo = new System.Windows.Forms.Button();
+            this.txtSaveTo = new System.Windows.Forms.TextBox();
+            this.lbSaveTo = new System.Windows.Forms.Label();
+            this.chZipFiles = new System.Windows.Forms.CheckBox();
+            this.cbFileFilter = new System.Windows.Forms.ComboBox();
+            this.lbFilterSelect = new System.Windows.Forms.Label();
             this.btSelectFolderPath = new System.Windows.Forms.Button();
             this.txtFolderPath = new System.Windows.Forms.TextBox();
-            this.lbFilterSelect = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.cbZipFiles = new System.Windows.Forms.CheckBox();
-            this.lbSaveTo = new System.Windows.Forms.Label();
-            this.txtSaveTo = new System.Windows.Forms.TextBox();
-            this.btSelectFolderSaveTo = new System.Windows.Forms.Button();
-            this.lbZipFilename = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lbFolderPath = new System.Windows.Forms.Label();
+            this.chOverwriteFiles = new System.Windows.Forms.CheckBox();
             this.tlPanel.SuspendLayout();
             this.gbSqlAnywhere.SuspendLayout();
             this.gbTTDS.SuspendLayout();
@@ -108,7 +110,7 @@
             this.gbSqlAnywhere.Controls.Add(this.txtDescriptionSqlAnywhere);
             this.gbSqlAnywhere.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.gbSqlAnywhere.ForeColor = System.Drawing.Color.White;
-            this.gbSqlAnywhere.Location = new System.Drawing.Point(42, 179);
+            this.gbSqlAnywhere.Location = new System.Drawing.Point(42, 159);
             this.gbSqlAnywhere.Name = "gbSqlAnywhere";
             this.gbSqlAnywhere.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
             this.gbSqlAnywhere.Size = new System.Drawing.Size(500, 140);
@@ -180,7 +182,7 @@
             this.btSelectFileSqlAnywhere.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btSelectFileSqlAnywhere.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btSelectFileSqlAnywhere.ForeColor = System.Drawing.Color.White;
-            this.btSelectFileSqlAnywhere.Location = new System.Drawing.Point(459, 19);
+            this.btSelectFileSqlAnywhere.Location = new System.Drawing.Point(459, 21);
             this.btSelectFileSqlAnywhere.Name = "btSelectFileSqlAnywhere";
             this.btSelectFileSqlAnywhere.Size = new System.Drawing.Size(32, 26);
             this.btSelectFileSqlAnywhere.TabIndex = 5;
@@ -238,7 +240,7 @@
             this.gbTTDS.Controls.Add(this.txtDescriptionTTDS);
             this.gbTTDS.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.gbTTDS.ForeColor = System.Drawing.Color.White;
-            this.gbTTDS.Location = new System.Drawing.Point(42, 33);
+            this.gbTTDS.Location = new System.Drawing.Point(42, 13);
             this.gbTTDS.Name = "gbTTDS";
             this.gbTTDS.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
             this.gbTTDS.Size = new System.Drawing.Size(500, 140);
@@ -312,9 +314,9 @@
             this.btSelectFileTTDS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btSelectFileTTDS.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btSelectFileTTDS.ForeColor = System.Drawing.Color.White;
-            this.btSelectFileTTDS.Location = new System.Drawing.Point(459, 22);
+            this.btSelectFileTTDS.Location = new System.Drawing.Point(459, 21);
             this.btSelectFileTTDS.Name = "btSelectFileTTDS";
-            this.btSelectFileTTDS.Size = new System.Drawing.Size(32, 25);
+            this.btSelectFileTTDS.Size = new System.Drawing.Size(32, 26);
             this.btSelectFileTTDS.TabIndex = 5;
             this.btSelectFileTTDS.Text = "...";
             this.btSelectFileTTDS.UseVisualStyleBackColor = false;
@@ -363,7 +365,7 @@
             this.btUpdateDatabase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btUpdateDatabase.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btUpdateDatabase.ForeColor = System.Drawing.Color.White;
-            this.btUpdateDatabase.Location = new System.Drawing.Point(42, 485);
+            this.btUpdateDatabase.Location = new System.Drawing.Point(42, 504);
             this.btUpdateDatabase.Name = "btUpdateDatabase";
             this.btUpdateDatabase.Size = new System.Drawing.Size(119, 43);
             this.btUpdateDatabase.TabIndex = 9;
@@ -373,36 +375,125 @@
             // 
             // gbFilterFiles
             // 
-            this.gbFilterFiles.Controls.Add(this.textBox1);
+            this.gbFilterFiles.Controls.Add(this.chOverwriteFiles);
+            this.gbFilterFiles.Controls.Add(this.btFilterFiles);
+            this.gbFilterFiles.Controls.Add(this.txtZipFilename);
             this.gbFilterFiles.Controls.Add(this.lbZipFilename);
             this.gbFilterFiles.Controls.Add(this.btSelectFolderSaveTo);
             this.gbFilterFiles.Controls.Add(this.txtSaveTo);
             this.gbFilterFiles.Controls.Add(this.lbSaveTo);
-            this.gbFilterFiles.Controls.Add(this.cbZipFiles);
-            this.gbFilterFiles.Controls.Add(this.comboBox1);
+            this.gbFilterFiles.Controls.Add(this.chZipFiles);
+            this.gbFilterFiles.Controls.Add(this.cbFileFilter);
             this.gbFilterFiles.Controls.Add(this.lbFilterSelect);
             this.gbFilterFiles.Controls.Add(this.btSelectFolderPath);
             this.gbFilterFiles.Controls.Add(this.txtFolderPath);
             this.gbFilterFiles.Controls.Add(this.lbFolderPath);
             this.gbFilterFiles.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.gbFilterFiles.ForeColor = System.Drawing.Color.White;
-            this.gbFilterFiles.Location = new System.Drawing.Point(42, 325);
+            this.gbFilterFiles.Location = new System.Drawing.Point(42, 305);
             this.gbFilterFiles.Name = "gbFilterFiles";
             this.gbFilterFiles.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
-            this.gbFilterFiles.Size = new System.Drawing.Size(500, 154);
+            this.gbFilterFiles.Size = new System.Drawing.Size(500, 193);
             this.gbFilterFiles.TabIndex = 10;
             this.gbFilterFiles.TabStop = false;
             this.gbFilterFiles.Text = "Filter Files";
             // 
-            // lbFolderPath
+            // btFilterFiles
             // 
-            this.lbFolderPath.AutoSize = true;
-            this.lbFolderPath.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbFolderPath.Location = new System.Drawing.Point(9, 25);
-            this.lbFolderPath.Name = "lbFolderPath";
-            this.lbFolderPath.Size = new System.Drawing.Size(70, 15);
-            this.lbFolderPath.TabIndex = 4;
-            this.lbFolderPath.Text = "FolderPath:";
+            this.btFilterFiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btFilterFiles.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btFilterFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btFilterFiles.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btFilterFiles.ForeColor = System.Drawing.Color.White;
+            this.btFilterFiles.Location = new System.Drawing.Point(9, 148);
+            this.btFilterFiles.Name = "btFilterFiles";
+            this.btFilterFiles.Size = new System.Drawing.Size(107, 36);
+            this.btFilterFiles.TabIndex = 16;
+            this.btFilterFiles.Text = "Filter Files";
+            this.btFilterFiles.UseVisualStyleBackColor = false;
+            this.btFilterFiles.Click += new System.EventHandler(this.btFilterFiles_Click);
+            // 
+            // txtZipFilename
+            // 
+            this.txtZipFilename.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtZipFilename.Location = new System.Drawing.Point(86, 109);
+            this.txtZipFilename.Name = "txtZipFilename";
+            this.txtZipFilename.Size = new System.Drawing.Size(405, 23);
+            this.txtZipFilename.TabIndex = 15;
+            // 
+            // lbZipFilename
+            // 
+            this.lbZipFilename.AutoSize = true;
+            this.lbZipFilename.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbZipFilename.Location = new System.Drawing.Point(9, 112);
+            this.lbZipFilename.Name = "lbZipFilename";
+            this.lbZipFilename.Size = new System.Drawing.Size(63, 15);
+            this.lbZipFilename.TabIndex = 14;
+            this.lbZipFilename.Text = "Zip Name:";
+            // 
+            // btSelectFolderSaveTo
+            // 
+            this.btSelectFolderSaveTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btSelectFolderSaveTo.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btSelectFolderSaveTo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btSelectFolderSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btSelectFolderSaveTo.ForeColor = System.Drawing.Color.White;
+            this.btSelectFolderSaveTo.Location = new System.Drawing.Point(459, 77);
+            this.btSelectFolderSaveTo.Name = "btSelectFolderSaveTo";
+            this.btSelectFolderSaveTo.Size = new System.Drawing.Size(32, 26);
+            this.btSelectFolderSaveTo.TabIndex = 13;
+            this.btSelectFolderSaveTo.Text = "...";
+            this.btSelectFolderSaveTo.UseVisualStyleBackColor = false;
+            this.btSelectFolderSaveTo.Click += new System.EventHandler(this.btSelectFolderSaveTo_Click);
+            // 
+            // txtSaveTo
+            // 
+            this.txtSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSaveTo.Location = new System.Drawing.Point(86, 80);
+            this.txtSaveTo.Name = "txtSaveTo";
+            this.txtSaveTo.Size = new System.Drawing.Size(367, 23);
+            this.txtSaveTo.TabIndex = 12;
+            // 
+            // lbSaveTo
+            // 
+            this.lbSaveTo.AutoSize = true;
+            this.lbSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSaveTo.Location = new System.Drawing.Point(9, 83);
+            this.lbSaveTo.Name = "lbSaveTo";
+            this.lbSaveTo.Size = new System.Drawing.Size(53, 15);
+            this.lbSaveTo.TabIndex = 11;
+            this.lbSaveTo.Text = "Save To:";
+            // 
+            // chZipFiles
+            // 
+            this.chZipFiles.AutoSize = true;
+            this.chZipFiles.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold);
+            this.chZipFiles.Location = new System.Drawing.Point(421, 55);
+            this.chZipFiles.Name = "chZipFiles";
+            this.chZipFiles.Size = new System.Drawing.Size(70, 19);
+            this.chZipFiles.TabIndex = 10;
+            this.chZipFiles.Text = "Zip Files";
+            this.chZipFiles.UseVisualStyleBackColor = true;
+            // 
+            // cbFileFilter
+            // 
+            this.cbFileFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFileFilter.Font = new System.Drawing.Font("Nirmala UI", 9F);
+            this.cbFileFilter.FormattingEnabled = true;
+            this.cbFileFilter.Location = new System.Drawing.Point(86, 51);
+            this.cbFileFilter.Name = "cbFileFilter";
+            this.cbFileFilter.Size = new System.Drawing.Size(212, 23);
+            this.cbFileFilter.TabIndex = 9;
+            // 
+            // lbFilterSelect
+            // 
+            this.lbFilterSelect.AutoSize = true;
+            this.lbFilterSelect.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFilterSelect.Location = new System.Drawing.Point(9, 56);
+            this.lbFilterSelect.Name = "lbFilterSelect";
+            this.lbFilterSelect.Size = new System.Drawing.Size(61, 15);
+            this.lbFilterSelect.TabIndex = 8;
+            this.lbFilterSelect.Text = "File Filter:";
             // 
             // btSelectFolderPath
             // 
@@ -417,6 +508,7 @@
             this.btSelectFolderPath.TabIndex = 7;
             this.btSelectFolderPath.Text = "...";
             this.btSelectFolderPath.UseVisualStyleBackColor = false;
+            this.btSelectFolderPath.Click += new System.EventHandler(this.btSelectFolderPath_Click);
             // 
             // txtFolderPath
             // 
@@ -426,87 +518,26 @@
             this.txtFolderPath.Size = new System.Drawing.Size(367, 23);
             this.txtFolderPath.TabIndex = 6;
             // 
-            // lbFilterSelect
+            // lbFolderPath
             // 
-            this.lbFilterSelect.AutoSize = true;
-            this.lbFilterSelect.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbFilterSelect.Location = new System.Drawing.Point(9, 89);
-            this.lbFilterSelect.Name = "lbFilterSelect";
-            this.lbFilterSelect.Size = new System.Drawing.Size(61, 15);
-            this.lbFilterSelect.TabIndex = 8;
-            this.lbFilterSelect.Text = "File Filter:";
+            this.lbFolderPath.AutoSize = true;
+            this.lbFolderPath.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFolderPath.Location = new System.Drawing.Point(9, 25);
+            this.lbFolderPath.Name = "lbFolderPath";
+            this.lbFolderPath.Size = new System.Drawing.Size(70, 15);
+            this.lbFolderPath.TabIndex = 4;
+            this.lbFolderPath.Text = "FolderPath:";
             // 
-            // comboBox1
+            // chOverwriteFiles
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Font = new System.Drawing.Font("Nirmala UI", 9F);
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(86, 84);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(317, 23);
-            this.comboBox1.TabIndex = 9;
-            // 
-            // cbZipFiles
-            // 
-            this.cbZipFiles.AutoSize = true;
-            this.cbZipFiles.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold);
-            this.cbZipFiles.Location = new System.Drawing.Point(421, 88);
-            this.cbZipFiles.Name = "cbZipFiles";
-            this.cbZipFiles.Size = new System.Drawing.Size(70, 19);
-            this.cbZipFiles.TabIndex = 10;
-            this.cbZipFiles.Text = "Zip Files";
-            this.cbZipFiles.UseVisualStyleBackColor = true;
-            // 
-            // lbSaveTo
-            // 
-            this.lbSaveTo.AutoSize = true;
-            this.lbSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSaveTo.Location = new System.Drawing.Point(9, 56);
-            this.lbSaveTo.Name = "lbSaveTo";
-            this.lbSaveTo.Size = new System.Drawing.Size(53, 15);
-            this.lbSaveTo.TabIndex = 11;
-            this.lbSaveTo.Text = "Save To:";
-            // 
-            // txtSaveTo
-            // 
-            this.txtSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSaveTo.Location = new System.Drawing.Point(86, 53);
-            this.txtSaveTo.Name = "txtSaveTo";
-            this.txtSaveTo.Size = new System.Drawing.Size(367, 23);
-            this.txtSaveTo.TabIndex = 12;
-            // 
-            // btSelectFolderSaveTo
-            // 
-            this.btSelectFolderSaveTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btSelectFolderSaveTo.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btSelectFolderSaveTo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btSelectFolderSaveTo.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSelectFolderSaveTo.ForeColor = System.Drawing.Color.White;
-            this.btSelectFolderSaveTo.Location = new System.Drawing.Point(459, 53);
-            this.btSelectFolderSaveTo.Name = "btSelectFolderSaveTo";
-            this.btSelectFolderSaveTo.Size = new System.Drawing.Size(32, 26);
-            this.btSelectFolderSaveTo.TabIndex = 13;
-            this.btSelectFolderSaveTo.Text = "...";
-            this.btSelectFolderSaveTo.UseVisualStyleBackColor = false;
-            // 
-            // lbZipFilename
-            // 
-            this.lbZipFilename.AutoSize = true;
-            this.lbZipFilename.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbZipFilename.Location = new System.Drawing.Point(9, 118);
-            this.lbZipFilename.Name = "lbZipFilename";
-            this.lbZipFilename.Size = new System.Drawing.Size(63, 15);
-            this.lbZipFilename.TabIndex = 14;
-            this.lbZipFilename.Text = "Zip Name:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(86, 115);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(405, 23);
-            this.textBox1.TabIndex = 15;
+            this.chOverwriteFiles.AutoSize = true;
+            this.chOverwriteFiles.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold);
+            this.chOverwriteFiles.Location = new System.Drawing.Point(304, 55);
+            this.chOverwriteFiles.Name = "chOverwriteFiles";
+            this.chOverwriteFiles.Size = new System.Drawing.Size(111, 19);
+            this.chOverwriteFiles.TabIndex = 17;
+            this.chOverwriteFiles.Text = "Overwrite Files";
+            this.chOverwriteFiles.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -559,17 +590,19 @@
         private System.Windows.Forms.Label lbProcessStatusIdTTDS;
         private System.Windows.Forms.Label lbProcessStatusTTDS;
         private System.Windows.Forms.GroupBox gbFilterFiles;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtZipFilename;
         private System.Windows.Forms.Label lbZipFilename;
         private System.Windows.Forms.Button btSelectFolderSaveTo;
         private System.Windows.Forms.TextBox txtSaveTo;
         private System.Windows.Forms.Label lbSaveTo;
-        private System.Windows.Forms.CheckBox cbZipFiles;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox chZipFiles;
+        private System.Windows.Forms.ComboBox cbFileFilter;
         private System.Windows.Forms.Label lbFilterSelect;
         private System.Windows.Forms.Button btSelectFolderPath;
         private System.Windows.Forms.TextBox txtFolderPath;
         private System.Windows.Forms.Label lbFolderPath;
+        private System.Windows.Forms.Button btFilterFiles;
+        private System.Windows.Forms.CheckBox chOverwriteFiles;
     }
 }
 

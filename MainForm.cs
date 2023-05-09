@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Entity;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,10 +15,11 @@ namespace UtilitiesPilar
 {
     public partial class MainForm : Form
     {
-        private ProcessUtil processTTDS;
-        private ProcessUtil processSqlAnywhere;
         private Tool toolTTDS;
         private Tool toolSqlAnywhere;
+        private FileFilterSetting defaultFileFilterSetting;
+        private ProcessUtil processTTDS = new ProcessUtil();
+        private ProcessUtil processSqlAnywhere = new ProcessUtil();
         private Classes.Database database = new Classes.Database();
 
         public MainForm()
@@ -32,11 +29,28 @@ namespace UtilitiesPilar
         }
 
         private void InitializeWindow() {
-            processTTDS = new ProcessUtil();
-            processSqlAnywhere = new ProcessUtil();
+            BindingList<FileFilter> fileFiltersList = database.SelectAllFileFilters(null);
+
+            cbFileFilter.DataSource = fileFiltersList;
+            cbFileFilter.DisplayMember = "Name";
+            cbFileFilter.ValueMember = "Id";
+
             toolTTDS = database.SelectTool("TTDS");
             toolSqlAnywhere = database.SelectTool("SQL Anywhere");
+            defaultFileFilterSetting = database.SelectFileFilterSetting("Default");
             Task.Run(() => { VerifyProcessStatus(); });
+
+            if (defaultFileFilterSetting == null)
+                defaultFileFilterSetting = new FileFilterSetting(0, 0, "Default");
+            else
+            {
+                txtFolderPath.Text = defaultFileFilterSetting.FolderOrigin;
+                txtSaveTo.Text = defaultFileFilterSetting.FolderDestination;
+                txtZipFilename.Text = defaultFileFilterSetting.ZipFilename;
+                cbFileFilter.SelectedValue = defaultFileFilterSetting.FileFilterId;
+                chOverwriteFiles.Checked = defaultFileFilterSetting.OverwriteFiles;
+                chZipFiles.Checked = defaultFileFilterSetting.ZipFiles;
+            }
 
             if (toolTTDS == null)
                 toolTTDS = new Tool("TTDS");
@@ -56,7 +70,6 @@ namespace UtilitiesPilar
             btStartTTDS_Click(this, new EventArgs());
             btStartSqlAnywhere_Click(this, new EventArgs());
         }
-
         private string SelectFile()
         {
             string returnValue = "";
@@ -69,7 +82,17 @@ namespace UtilitiesPilar
 
             return returnValue;
         }
+        private string SelectFolder()
+        {
+            string returnValue = "";
 
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+
+            if (folderDialog.ShowDialog(this) == DialogResult.OK)
+                returnValue = folderDialog.SelectedPath;
+
+            return returnValue;
+        }
         private void VerifyProcessStatus()
         { 
             string statusTTDS;
@@ -102,7 +125,6 @@ namespace UtilitiesPilar
                 }
             }
         }
-
         private void DisplayProcessInfo(string status, string processName)
         {
             System.Windows.Forms.Label lbStatus = new System.Windows.Forms.Label();
@@ -144,6 +166,97 @@ namespace UtilitiesPilar
             lbStatus.Visible = true;
             lbProcessId.Visible = true;
 
+        }
+
+        private void FilterFiles() {
+            bool overwiteFiles = chOverwriteFiles.Checked;
+            bool zipFiles = chZipFiles.Checked;
+            int fileFilterId = (Int32)cbFileFilter.SelectedValue;
+            string zipFilename = txtZipFilename.Text;
+            string destinationFolder = txtSaveTo.Text;
+            string returnMessage = "Task executed successfully.";
+
+            List<FileFilterCondition> fileFilterList = database.SelectAllFileFilterConditions(fileFilterId);
+            List<string> fileList = Directory.GetFiles(txtFolderPath.Text).ToList();
+            List<string> filteredFileList = new List<string>();
+
+            Task.Run(() => {
+                try
+                {
+                    if (!Directory.Exists(txtSaveTo.Text))
+                        throw new Exception("Folder does not exists.");
+
+
+                    foreach (FileFilterCondition condition in fileFilterList)
+                    {
+                        List<string> tempFileList = new List<string>();
+
+                        switch (condition.Type)
+                        {
+                            case "FilenameContains":
+                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
+                                            .Contains(condition.Condition)).ToList());
+                                break;
+                            case "FilenameExact":
+                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
+                                            .Equals(condition.Condition)).ToList());
+                                break;
+                            case "FilenameEndsWith":
+                                tempFileList.AddRange(fileList.Where(item => item.Substring(0, item.LastIndexOf('.'))
+                                            .EndsWith(condition.Condition)).ToList());
+                                break;
+                            case "FilenameStartsWith":
+                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
+                                            .StartsWith(condition.Condition)).ToList());
+                                break;
+                        }
+
+                        if (tempFileList != null && !condition.FileExtension.Equals(string.Empty))
+                        {
+                            tempFileList = tempFileList.Where(item => item.EndsWith(condition.FileExtension)).ToList();
+                        }
+
+                        if (tempFileList != null)
+                        {
+                            filteredFileList.AddRange(tempFileList);
+                        }
+                    }
+
+                    if (filteredFileList != null)
+                    {
+                        foreach (string filename in filteredFileList)
+                        {
+                            File.Copy(filename, destinationFolder + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1), overwiteFiles);
+                        }
+
+                        if (zipFiles && !zipFilename.Equals(string.Empty))
+                        {
+                            using (ZipArchive zip = ZipFile.Open(destinationFolder + "\\" + zipFilename + ".zip", ZipArchiveMode.Create))
+                            {
+                                foreach (string filename in filteredFileList)
+                                {
+                                    zip.CreateEntryFromFile(filename, filename.Substring(filename.LastIndexOf('\\') + 1));
+                                }
+                            }
+                        }
+
+                        foreach (string filename in filteredFileList)
+                        {
+                            File.Delete(destinationFolder + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1));
+                        }
+                    }
+                    else
+                        returnMessage = "None of the files found match this filter.";
+
+                }
+                catch (Exception ex) 
+                { 
+                    returnMessage = "Error: "+ex.Message;
+                }
+
+                Invoke(new Action(() => { MessageBox.Show(returnMessage); }));
+                
+            });
         }
 
         private void btSelectFileTTDS_Click(object sender, EventArgs e)
@@ -206,6 +319,32 @@ namespace UtilitiesPilar
                 database.UpdateTool(toolSqlAnywhere);
             }
 
+            if (defaultFileFilterSetting != null)
+            {
+                defaultFileFilterSetting = new FileFilterSetting(0, (Int32)cbFileFilter.SelectedValue, "Default",
+                    txtFolderPath.Text, txtSaveTo.Text, txtZipFilename.Text, chZipFiles.Checked, chOverwriteFiles.Checked);
+                database.UpdateFileFilterSetting(defaultFileFilterSetting);
+            }
+            MessageBox.Show("Database Updated Successfully.","Database Update",MessageBoxButtons.OK,MessageBoxIcon.Information);
+        }
+
+        private void btSelectFolderPath_Click(object sender, EventArgs e)
+        {
+            string folderPath = SelectFolder();
+            if (folderPath != "")
+                txtFolderPath.Text = folderPath;
+        }
+
+        private void btSelectFolderSaveTo_Click(object sender, EventArgs e)
+        {
+            string folderPath = SelectFolder();
+            if (folderPath != "")
+                txtSaveTo.Text = folderPath;
+        }
+
+        private void btFilterFiles_Click(object sender, EventArgs e)
+        {
+           FilterFiles();
         }
     }
 }

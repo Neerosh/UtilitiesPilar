@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace UtilitiesPilar.Classes
 {
     /* File Filter Types:  example file => filename.mp3
-     * FilenameExact => Conditiion = filename.mp3
+     * FilenameExact => Condition = filename.mp3
      * FilenameContains => Condition = filename
      * FilenameEndsWith => Condition = .mp3
      * FilenameStartsWith => Condition = file
@@ -67,7 +67,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id.ToString()},
+                {"Id", Id > 0 ? Id.ToString() : ""},
             };
 
             return returnDictionary;
