@@ -42,7 +42,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id.ToString()},
+                {"Id", Id > 0 ? Id.ToString() : ""},
                 {"FileFilterId", FileFilterId.ToString()},
                 {"Name", "'"+Name+"'" },
                 {"FolderOrigin","'"+FolderOrigin+"'" },

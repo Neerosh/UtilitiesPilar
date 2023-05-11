@@ -28,6 +28,12 @@ namespace UtilitiesPilar.Classes
             Description = description;
             FilePath = filePath;
         }
+        public Tool(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public Tool(string name)
         {
             Name = name;
@@ -38,7 +44,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>() 
             {
-                {"Id", Id.ToString()},
+                {"Id", Id >= 0 ? Id.ToString() : ""},
                 {"Name", "'"+Name+"'" },
                 {"Description", "'"+Description+"'"},
                 {"FilePath", "'"+FilePath+"'" }
@@ -51,7 +57,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id > 0 ? Id.ToString() : ""},
+                {"Id", Id >= 0 ? Id.ToString() : ""},
             };
 
             return returnDictionary;

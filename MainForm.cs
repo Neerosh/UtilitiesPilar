@@ -53,7 +53,7 @@ namespace UtilitiesPilar
             }
 
             if (toolTTDS == null)
-                toolTTDS = new Tool("TTDS");
+                toolTTDS = new Tool(0,"TTDS");
             else
             { 
                 txtDescriptionTTDS.Text = toolTTDS.Description;
@@ -61,7 +61,7 @@ namespace UtilitiesPilar
             }
 
             if (toolSqlAnywhere == null)
-                toolSqlAnywhere = new Tool("SQL Anywhere");
+                toolSqlAnywhere = new Tool(1,"SQL Anywhere");
             else
             { 
                 txtDescriptionSqlAnywhere.Text = toolSqlAnywhere.Description;

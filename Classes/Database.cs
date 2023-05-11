@@ -75,10 +75,10 @@ namespace UtilitiesPilar.Classes
 
             if (fileFilter != null)
             {
-                fileFilterCondition = new FileFilterCondition(fileFilter.Id, "Predefined Condition", "FilenameStartsWith", "TaskToDo", ".dll");
+                fileFilterCondition = new FileFilterCondition(0,fileFilter.Id, "Predefined Condition", "FilenameStartsWith", "TaskToDo", ".dll");
                 UpdateFileFilter(fileFilterCondition);
 
-                fileFilterCondition = new FileFilterCondition(fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe");
+                fileFilterCondition = new FileFilterCondition(1,fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe");
                 UpdateFileFilter(fileFilterCondition);
             }
         }
@@ -233,7 +233,7 @@ namespace UtilitiesPilar.Classes
         {
             FileFilterSetting fileFilterSetting = null;
             SQLiteDataReader reader = null;
-            string command = @"SELECT * FROM FileFilterSettings WHERE id = 0";
+            string command = @"SELECT * FROM FileFilterSettings WHERE name = '"+ name +"'";
             try
             {
                 reader = RunCommandNonQueryReader(command);

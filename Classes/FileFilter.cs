@@ -30,7 +30,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id.ToString()},
+                {"Id", Id >= 0 ? Id.ToString() : "" },
                 {"Name", "'"+Name+"'" },
                 {"Description", "'"+Description+"'"}
             };
@@ -42,7 +42,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id > 0 ? Id.ToString() : ""},
+                {"Id", Id >= 0 ? Id.ToString() : ""},
             };
 
             return returnDictionary;

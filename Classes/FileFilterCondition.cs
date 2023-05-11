@@ -23,8 +23,9 @@ namespace UtilitiesPilar.Classes
         public string FileExtension { get; set; }
 
 
-        public FileFilterCondition(int fileFilterId, string name, string type, string condition)
+        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition)
         {
+            Id = id;
             FileFilterId = fileFilterId;
             Name = name;
             Type = type;
@@ -52,7 +53,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id.ToString()},
+                {"Id",  Id >= 0 ? Id.ToString() : ""},
                 {"FileFilterId", FileFilterId.ToString()},
                 {"Name", "'"+Name+"'" },
                 {"Type", "'"+Type+"'"},
@@ -67,7 +68,7 @@ namespace UtilitiesPilar.Classes
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>()
             {
-                {"Id", Id > 0 ? Id.ToString() : ""},
+                {"Id", Id >= 0 ? Id.ToString() : ""},
             };
 
             return returnDictionary;
