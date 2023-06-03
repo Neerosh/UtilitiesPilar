@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\FileFilter.cs" />
+    <Compile Include="Classes\FileFilterService.cs" />
     <Compile Include="Classes\FileFilterSetting.cs" />
     <Compile Include="Classes\FileFilterCondition.cs" />
     <Compile Include="Classes\ProcessUtil.cs" />

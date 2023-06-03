@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace UtilitiesPilar.Classes
 {
-    internal class FileFilterSetting
+    public class FileFilterSetting
     {
         public int Id { get; }
         public int FileFilterId { get; }
 
         public string Name { get; set; }
         public string FolderOrigin { get; set; }
+        public string FolderOriginAux { get; set; }
         public string FolderDestination { get; set; }
         public string ZipFilename { get; set; }
         public bool ZipFiles { get; set; }
@@ -26,7 +23,7 @@ namespace UtilitiesPilar.Classes
         }
 
         public FileFilterSetting(int id, int fileFilterId, string name, string folderOrigin, string folderDestination,
-            string zipFilename, bool zipFiles, bool overwriteFiles)
+            string zipFilename, bool zipFiles, bool overwriteFiles, string folderOriginAux)
         {
             Id = id;
             FileFilterId = fileFilterId;
@@ -36,6 +33,7 @@ namespace UtilitiesPilar.Classes
             ZipFilename = zipFilename;
             ZipFiles = zipFiles;
             OverwriteFiles = overwriteFiles;
+            FolderOriginAux = folderOriginAux;
         }
 
         public Dictionary<string, string> SqlKeyValues()
@@ -46,6 +44,7 @@ namespace UtilitiesPilar.Classes
                 {"FileFilterId", FileFilterId.ToString()},
                 {"Name", "'"+Name+"'" },
                 {"FolderOrigin","'"+FolderOrigin+"'" },
+                {"FolderOriginAux","'"+FolderOriginAux+"'" },
                 {"FolderDestination", "'"+FolderDestination+"'"},
                 {"ZipFilename", "'"+ZipFilename+"'" },
                 {"ZipFiles", ZipFiles.ToString() },

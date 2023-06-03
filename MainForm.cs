@@ -21,7 +21,6 @@ namespace UtilitiesPilar
         private ProcessUtil processTTDS = new ProcessUtil();
         private ProcessUtil processSqlAnywhere = new ProcessUtil();
         private Classes.Database database = new Classes.Database();
-
         public MainForm()
         {
             InitializeComponent();
@@ -44,7 +43,8 @@ namespace UtilitiesPilar
                 defaultFileFilterSetting = new FileFilterSetting(0, 0, "Default");
             else
             {
-                txtFolderPath.Text = defaultFileFilterSetting.FolderOrigin;
+                txtFolderOrigin.Text = defaultFileFilterSetting.FolderOrigin;
+                txtFolderOriginAux.Text = defaultFileFilterSetting.FolderOriginAux;
                 txtSaveTo.Text = defaultFileFilterSetting.FolderDestination;
                 txtZipFilename.Text = defaultFileFilterSetting.ZipFilename;
                 cbFileFilter.SelectedValue = defaultFileFilterSetting.FileFilterId;
@@ -167,98 +167,6 @@ namespace UtilitiesPilar
             lbProcessId.Visible = true;
 
         }
-
-        private void FilterFiles() {
-            bool overwiteFiles = chOverwriteFiles.Checked;
-            bool zipFiles = chZipFiles.Checked;
-            int fileFilterId = (Int32)cbFileFilter.SelectedValue;
-            string zipFilename = txtZipFilename.Text;
-            string destinationFolder = txtSaveTo.Text;
-            string returnMessage = "Task executed successfully.";
-
-            List<FileFilterCondition> fileFilterList = database.SelectAllFileFilterConditions(fileFilterId);
-            List<string> fileList = Directory.GetFiles(txtFolderPath.Text).ToList();
-            List<string> filteredFileList = new List<string>();
-
-            Task.Run(() => {
-                try
-                {
-                    if (!Directory.Exists(txtSaveTo.Text))
-                        throw new Exception("Folder does not exists.");
-
-
-                    foreach (FileFilterCondition condition in fileFilterList)
-                    {
-                        List<string> tempFileList = new List<string>();
-
-                        switch (condition.Type)
-                        {
-                            case "FilenameContains":
-                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
-                                            .Contains(condition.Condition)).ToList());
-                                break;
-                            case "FilenameExact":
-                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
-                                            .Equals(condition.Condition)).ToList());
-                                break;
-                            case "FilenameEndsWith":
-                                tempFileList.AddRange(fileList.Where(item => item.Substring(0, item.LastIndexOf('.'))
-                                            .EndsWith(condition.Condition)).ToList());
-                                break;
-                            case "FilenameStartsWith":
-                                tempFileList.AddRange(fileList.Where(item => item.Substring(item.LastIndexOf('\\') + 1)
-                                            .StartsWith(condition.Condition)).ToList());
-                                break;
-                        }
-
-                        if (tempFileList != null && !condition.FileExtension.Equals(string.Empty))
-                        {
-                            tempFileList = tempFileList.Where(item => item.EndsWith(condition.FileExtension)).ToList();
-                        }
-
-                        if (tempFileList != null)
-                        {
-                            filteredFileList.AddRange(tempFileList);
-                        }
-                    }
-
-                    if (filteredFileList != null)
-                    {
-                        foreach (string filename in filteredFileList)
-                        {
-                            File.Copy(filename, destinationFolder + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1), overwiteFiles);
-                        }
-
-                        if (zipFiles && !zipFilename.Equals(string.Empty))
-                        {
-                            using (ZipArchive zip = ZipFile.Open(destinationFolder + "\\" + zipFilename + ".zip", ZipArchiveMode.Create))
-                            {
-                                foreach (string filename in filteredFileList)
-                                {
-                                    zip.CreateEntryFromFile(filename, filename.Substring(filename.LastIndexOf('\\') + 1));
-                                }
-                            }
-                        }
-
-                        foreach (string filename in filteredFileList)
-                        {
-                            File.Delete(destinationFolder + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1));
-                        }
-                    }
-                    else
-                        returnMessage = "None of the files found match this filter.";
-
-                }
-                catch (Exception ex) 
-                { 
-                    returnMessage = "Error: "+ex.Message;
-                }
-
-                Invoke(new Action(() => { MessageBox.Show(returnMessage); }));
-                
-            });
-        }
-
         private void btSelectFileTTDS_Click(object sender, EventArgs e)
         {
             string filepath = SelectFile();
@@ -322,17 +230,24 @@ namespace UtilitiesPilar
             if (defaultFileFilterSetting != null)
             {
                 defaultFileFilterSetting = new FileFilterSetting(0, (Int32)cbFileFilter.SelectedValue, "Default",
-                    txtFolderPath.Text, txtSaveTo.Text, txtZipFilename.Text, chZipFiles.Checked, chOverwriteFiles.Checked);
+                    txtFolderOrigin.Text, txtSaveTo.Text, txtZipFilename.Text, chZipFiles.Checked, chOverwriteFiles.Checked, txtFolderOriginAux.Text);
                 database.UpdateFileFilterSetting(defaultFileFilterSetting);
             }
             MessageBox.Show("Database Updated Successfully.","Database Update",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
-        private void btSelectFolderPath_Click(object sender, EventArgs e)
+        private void btSelectFolderOrigin_Click(object sender, EventArgs e)
         {
             string folderPath = SelectFolder();
             if (folderPath != "")
-                txtFolderPath.Text = folderPath;
+                txtFolderOrigin.Text = folderPath;
+        }
+
+        private void btSelectFolderOriginAux_Click(object sender, EventArgs e)
+        {
+            string folderPath = SelectFolder();
+            if (folderPath != "")
+                txtFolderOriginAux.Text = folderPath;
         }
 
         private void btSelectFolderSaveTo_Click(object sender, EventArgs e)
@@ -344,7 +259,7 @@ namespace UtilitiesPilar
 
         private void btFilterFiles_Click(object sender, EventArgs e)
         {
-           FilterFiles();
+            FileFilterService.FilterFiles(defaultFileFilterSetting, this);
         }
     }
 }

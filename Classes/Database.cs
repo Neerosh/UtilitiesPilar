@@ -38,9 +38,11 @@ namespace UtilitiesPilar.Classes
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
                                 Name VARCHAR(50) NOT NULL,
+                                SubFolderPath VARCHAR(50) NOT NULL,
                                 Type Varchar(30) NOT NULL,                      
                                 Condition Varchar(1000) NOT NULL,
                                 FileExtension Varchar(30) NOT NULL,
+                                UserFolderOriginAux Boolean NOT NULL,
                                 UNIQUE (FileFilterId,Type,Condition,FileExtension),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );
@@ -48,11 +50,12 @@ namespace UtilitiesPilar.Classes
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
                                 Name VARCHAR(50) NOT NULL,
-                                FolderOrigin Varchar(1000) NOT NULL,                      
+                                FolderOrigin Varchar(1000) NOT NULL,                   
                                 FolderDestination Varchar(1000) NOT NULL,
                                 ZipFilename Varchar(100) NOT NULL,
                                 ZipFiles Boolean NOT NULL,
                                 OverwriteFiles Boolean NOT NULL,
+                                FolderOriginAux Varchar(1000) NOT NULL, 
                                 UNIQUE (Id),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );";
@@ -67,7 +70,7 @@ namespace UtilitiesPilar.Classes
 
         private void CreateDefaultFileFilter() 
         { 
-            FileFilter fileFilter = new FileFilter("TaskToDoAutomation QA", "TaskToDoAutomation version designated to quality assurance.");
+            FileFilter fileFilter = new FileFilter(0, "TaskToDoAutomation QA", "TaskToDoAutomation version designated to quality assurance.");
             FileFilterCondition fileFilterCondition;
 
             UpdateFileFilter(fileFilter);
@@ -75,10 +78,32 @@ namespace UtilitiesPilar.Classes
 
             if (fileFilter != null)
             {
-                fileFilterCondition = new FileFilterCondition(0,fileFilter.Id, "Predefined Condition", "FilenameStartsWith", "TaskToDo", ".dll");
+                fileFilterCondition = new FileFilterCondition(0, fileFilter.Id, "Predefined Condition", "FilenameStartsWith", "TaskToDo", ".dll");
+                UpdateFileFilter(fileFilterCondition);
+                fileFilterCondition = new FileFilterCondition(1, fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe");
+                UpdateFileFilter(fileFilterCondition);
+            }
+
+            fileFilter = new FileFilter(1, "TaskToDoAutomation Official", "TaskToDoAutomation version designated to official release includes BrainService.");
+            UpdateFileFilter(fileFilter);
+            fileFilter = SelectFileFilter(fileFilter.Name);
+
+            if (fileFilter != null)
+            {
+                fileFilterCondition = new FileFilterCondition(0, fileFilter.Id, "Predefined Condition",
+                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "TaskToDo/dlls");
+                UpdateFileFilter(fileFilterCondition);
+                fileFilterCondition = new FileFilterCondition(1, fileFilter.Id, "Predefined Condition",
+                    "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "TaskToDo");
                 UpdateFileFilter(fileFilterCondition);
 
-                fileFilterCondition = new FileFilterCondition(1,fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe");
+                fileFilterCondition = new FileFilterCondition(2, fileFilter.Id, "Predefined Condition",
+                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "BrainService/dlls")
+                { UserFolderOriginAux = true };
+                UpdateFileFilter(fileFilterCondition);
+                fileFilterCondition = new FileFilterCondition(3, fileFilter.Id, "Predefined Condition",
+                    "FilenameExact", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "BrainService")
+                { UserFolderOriginAux = true };
                 UpdateFileFilter(fileFilterCondition);
             }
         }
@@ -240,7 +265,7 @@ namespace UtilitiesPilar.Classes
                 while (reader.Read())
                 {
                     fileFilterSetting = new FileFilterSetting(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3),
-                        reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetBoolean(7));
+                        reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetBoolean(7), reader.GetString(8));
                 }
             }
             catch (Exception ex)
