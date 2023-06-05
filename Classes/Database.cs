@@ -38,11 +38,11 @@ namespace UtilitiesPilar.Classes
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
                                 Name VARCHAR(50) NOT NULL,
-                                SubFolderPath VARCHAR(50) NOT NULL,
                                 Type Varchar(30) NOT NULL,                      
                                 Condition Varchar(1000) NOT NULL,
                                 FileExtension Varchar(30) NOT NULL,
                                 UserFolderOriginAux Boolean NOT NULL,
+                                SubFolderPath VARCHAR(50) NOT NULL,
                                 UNIQUE (FileFilterId,Type,Condition,FileExtension),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );
@@ -80,7 +80,7 @@ namespace UtilitiesPilar.Classes
             {
                 fileFilterCondition = new FileFilterCondition(0, fileFilter.Id, "Predefined Condition", "FilenameStartsWith", "TaskToDo", ".dll");
                 UpdateFileFilter(fileFilterCondition);
-                fileFilterCondition = new FileFilterCondition(1, fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe");
+                fileFilterCondition = new FileFilterCondition(1, fileFilter.Id, "Predefined Condition", "FilenameExact", "TaskToDo.exe", "");
                 UpdateFileFilter(fileFilterCondition);
             }
 
@@ -90,19 +90,19 @@ namespace UtilitiesPilar.Classes
 
             if (fileFilter != null)
             {
-                fileFilterCondition = new FileFilterCondition(0, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "TaskToDo/dlls");
-                UpdateFileFilter(fileFilterCondition);
-                fileFilterCondition = new FileFilterCondition(1, fileFilter.Id, "Predefined Condition",
-                    "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "TaskToDo");
-                UpdateFileFilter(fileFilterCondition);
-
                 fileFilterCondition = new FileFilterCondition(2, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "BrainService/dlls")
-                { UserFolderOriginAux = true };
+                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo/dlls");
                 UpdateFileFilter(fileFilterCondition);
                 fileFilterCondition = new FileFilterCondition(3, fileFilter.Id, "Predefined Condition",
-                    "FilenameExact", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "BrainService")
+                    "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo");
+                UpdateFileFilter(fileFilterCondition);
+
+                fileFilterCondition = new FileFilterCondition(4, fileFilter.Id, "Predefined Condition",
+                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService/dlls")
+                { UserFolderOriginAux = true };
+                UpdateFileFilter(fileFilterCondition);
+                fileFilterCondition = new FileFilterCondition(5, fileFilter.Id, "Predefined Condition",
+                    "FilenameExact", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService")
                 { UserFolderOriginAux = true };
                 UpdateFileFilter(fileFilterCondition);
             }
@@ -226,7 +226,7 @@ namespace UtilitiesPilar.Classes
                 while (reader.Read())
                 {
                     FileFilterCondition fileFiltercondition = new FileFilterCondition(reader.GetInt32(0), reader.GetInt32(1),
-                        reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5));
+                        reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetString(7));
                     fileFilterConditions.Add(fileFiltercondition);
                 }
             }

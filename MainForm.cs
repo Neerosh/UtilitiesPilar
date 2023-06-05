@@ -259,7 +259,8 @@ namespace UtilitiesPilar
 
         private void btFilterFiles_Click(object sender, EventArgs e)
         {
-            FileFilterService.FilterFiles(defaultFileFilterSetting, this);
+
+            FileFilterService.FilterFiles(defaultFileFilterSetting, cbFileFilter.SelectedIndex, this);
         }
     }
 }

@@ -22,33 +22,32 @@ namespace UtilitiesPilar.Classes
         public string FileExtension { get; set; }
         public bool UserFolderOriginAux { get; set; }
 
-        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string subFolderPath = "")
+        public FileFilterCondition(int id, int fileFilterId)
         {
             Id = id;
             FileFilterId = fileFilterId;
-            Name = name;
-            SubFolderPath = subFolderPath;
-            Type = type;
-            Condition = condition;
         }
-        public FileFilterCondition(int fileFilterId, string name, string type, string condition, string fileExtension, string subFolderPath = "")
-        {
-            FileFilterId = fileFilterId;
-            Name = name;
-            SubFolderPath = subFolderPath;
-            Type = type;
-            Condition = condition;
-            FileExtension = fileExtension;
-        }
+
         public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, string subFolderPath = "")
         {
             Id = id;
             FileFilterId = fileFilterId;
             Name = name;
-            SubFolderPath = subFolderPath;
             Type = type;
             Condition = condition;
             FileExtension = fileExtension;
+            SubFolderPath = subFolderPath;
+        }
+        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, bool userFolderOriginAux, string subFolderPath = "")
+        {
+            Id = id;
+            FileFilterId = fileFilterId;
+            Name = name;
+            Type = type;
+            Condition = condition;
+            FileExtension = fileExtension;
+            UserFolderOriginAux = userFolderOriginAux;
+            SubFolderPath = subFolderPath;
         }
 
         public Dictionary<string, string> SqlKeyValues()
@@ -58,11 +57,11 @@ namespace UtilitiesPilar.Classes
                 {"Id",  Id >= 0 ? Id.ToString() : ""},
                 {"FileFilterId", FileFilterId.ToString()},
                 {"Name", "'"+Name+"'" },
-                {"SubFolderPath","'"+SubFolderPath+"'" },
                 {"Type", "'"+Type+"'"},
                 {"Condition", "'"+Condition+"'" },
                 {"FileExtension", "'"+FileExtension+"'" },
-                {"UserFolderOriginAux", UserFolderOriginAux ? "true" : "false" }
+                {"UserFolderOriginAux", UserFolderOriginAux ? "true" : "false" },
+                {"SubFolderPath","'"+SubFolderPath+"'" }
             };
 
             return returnDictionary;
