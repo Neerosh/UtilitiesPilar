@@ -38,11 +38,12 @@ namespace UtilitiesPilar.Classes
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
                                 Name VARCHAR(50) NOT NULL,
-                                Type Varchar(30) NOT NULL,                      
-                                Condition Varchar(1000) NOT NULL,
-                                FileExtension Varchar(30) NOT NULL,
+                                Type VARCHAR(30) NOT NULL,                      
+                                Condition VARCHAR(1000) NOT NULL,
+                                FileExtension VARCHAR(30) NOT NULL,
                                 UserFolderOriginAux Boolean NOT NULL,
                                 SubFolderPath VARCHAR(50) NOT NULL,
+                                IncludeFolders Boolean NOT NULL,
                                 UNIQUE (FileFilterId,Type,Condition,FileExtension),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );
@@ -50,12 +51,12 @@ namespace UtilitiesPilar.Classes
                                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 FileFilterId INTEGER NOT NULL,
                                 Name VARCHAR(50) NOT NULL,
-                                FolderOrigin Varchar(1000) NOT NULL,                   
-                                FolderDestination Varchar(1000) NOT NULL,
-                                ZipFilename Varchar(100) NOT NULL,
+                                FolderOrigin VARCHAR(1000) NOT NULL,                   
+                                FolderDestination VARCHAR(1000) NOT NULL,
+                                ZipFilename VARCHAR(100) NOT NULL,
                                 ZipFiles Boolean NOT NULL,
                                 OverwriteFiles Boolean NOT NULL,
-                                FolderOriginAux Varchar(1000) NOT NULL, 
+                                FolderOriginAux VARCHAR(1000) NOT NULL, 
                                 UNIQUE (Id),
                                 FOREIGN KEY(FileFilterId) REFERENCES FileFilters(Id) ON DELETE CASCADE
                             );";
@@ -91,14 +92,14 @@ namespace UtilitiesPilar.Classes
             if (fileFilter != null)
             {
                 fileFilterCondition = new FileFilterCondition(2, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo/dlls");
+                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo\\dlls",true);
                 UpdateFileFilter(fileFilterCondition);
                 fileFilterCondition = new FileFilterCondition(3, fileFilter.Id, "Predefined Condition",
                     "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo");
                 UpdateFileFilter(fileFilterCondition);
 
                 fileFilterCondition = new FileFilterCondition(4, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService/dlls")
+                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService\\dlls", true)
                 { UserFolderOriginAux = true };
                 UpdateFileFilter(fileFilterCondition);
                 fileFilterCondition = new FileFilterCondition(5, fileFilter.Id, "Predefined Condition",
@@ -226,7 +227,7 @@ namespace UtilitiesPilar.Classes
                 while (reader.Read())
                 {
                     FileFilterCondition fileFiltercondition = new FileFilterCondition(reader.GetInt32(0), reader.GetInt32(1),
-                        reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetString(7));
+                        reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetBoolean(6), reader.GetString(7), reader.GetBoolean(8));
                     fileFilterConditions.Add(fileFiltercondition);
                 }
             }

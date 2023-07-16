@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.IO.Compression;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics.Eventing.Reader;
 
 namespace UtilitiesPilar.Classes
 {
@@ -26,19 +23,28 @@ namespace UtilitiesPilar.Classes
                         throw new Exception("Folder does not exists.");
 
                     List<FileFilterCondition> fileFilterList = database.SelectAllFileFilterConditions(fileFilterId);
-                    List<string> fileListOrigin = Directory.GetFiles(fileFilterSetting.FolderOrigin).ToList();
+                    List<string> fileListOrigin = new List<string>();
                     List<string> fileListOriginAux = new List<string>();
                     List<string> filteredFileList = new List<string>();
-
-                    if (!String.IsNullOrEmpty(fileFilterSetting.FolderOriginAux))
-                        fileListOriginAux = Directory.GetFiles(fileFilterSetting.FolderOriginAux).ToList();
+                    SearchOption searchOption = SearchOption.TopDirectoryOnly;
 
                     foreach (FileFilterCondition condition in fileFilterList)
                     {
-                        if (condition.UserFolderOriginAux)
-                            filteredFileList.AddRange(CopyAction(fileFilterSetting, condition, fileListOriginAux));
+                        if (condition.IncludeFolders)
+                            searchOption = SearchOption.AllDirectories;
                         else
-                            filteredFileList.AddRange(CopyAction(fileFilterSetting, condition, fileListOrigin));
+                            searchOption = SearchOption.TopDirectoryOnly;
+
+                        if (condition.UserFolderOriginAux)
+                        {
+                            fileListOriginAux = Directory.GetFiles(fileFilterSetting.FolderOriginAux, "*", searchOption).ToList();
+                            filteredFileList.AddRange(CopyActionFile(fileFilterSetting, condition, fileListOriginAux));
+                        }
+                        else
+                        {
+                            fileListOrigin = Directory.GetFiles(fileFilterSetting.FolderOrigin, "*", searchOption).ToList();
+                            filteredFileList.AddRange(CopyActionFile(fileFilterSetting, condition, fileListOrigin));
+                        }
                     }
 
                     if (filteredFileList != null)
@@ -56,7 +62,7 @@ namespace UtilitiesPilar.Classes
                             {
                                 foreach (string filename in filteredFileList)
                                 {
-                                    zip.CreateEntryFromFile(filename, filename.Replace(fileFilterSetting.FolderDestination + "\\", ""));
+                                    zip.CreateEntryFromFile(filename, filename.Replace(fileFilterSetting.FolderDestination + "\\", fileFilterSetting.ZipFilename + "\\"));
                                 }
                             }
 
@@ -93,7 +99,7 @@ namespace UtilitiesPilar.Classes
             });
         }
 
-        private static List<string> CopyAction(FileFilterSetting fileFilterSetting, FileFilterCondition fileCondition, List<string> fileList)
+        private static List<string> CopyActionFile(FileFilterSetting fileFilterSetting, FileFilterCondition fileCondition, List<string> fileList)
         {
             List<string> tempFileList = new List<string>();
             List<string> returnFileList = new List<string>();
@@ -147,14 +153,21 @@ namespace UtilitiesPilar.Classes
             {
                 foreach (string filename in tempFileList)
                 {
-
-                    string copiedFilename = fileFilterSetting.FolderDestination + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1);
+                    string copiedFilename = string.Empty;
+                    string destination = fileFilterSetting.FolderDestination;
 
                     if (!String.IsNullOrEmpty(fileCondition.SubFolderPath))
-                        copiedFilename = fileFilterSetting.FolderDestination + "\\" + fileCondition.SubFolderPath + "\\" + filename.Substring(filename.LastIndexOf('\\') + 1);
+                        destination += "\\" + fileCondition.SubFolderPath;
 
-                    if (!Directory.Exists(copiedFilename.Substring(0,copiedFilename.LastIndexOf('\\'))))
-                        Directory.CreateDirectory(copiedFilename.Substring(0, copiedFilename.LastIndexOf('\\')));
+                    if (fileCondition.UserFolderOriginAux)
+                        copiedFilename = filename.Replace(fileFilterSetting.FolderOriginAux, destination);
+                    else
+                        copiedFilename = filename.Replace(fileFilterSetting.FolderOrigin, destination);
+
+                    if (!copiedFilename.EndsWith(filename.Substring(filename.LastIndexOf('\\'))))
+                        copiedFilename += "\\" + filename.Substring(filename.LastIndexOf('\\'));
+
+                    CreateDirectories(copiedFilename);
 
                     File.Copy(filename, copiedFilename, fileFilterSetting.OverwriteFiles);
                     returnFileList.Add(copiedFilename);
@@ -162,5 +175,21 @@ namespace UtilitiesPilar.Classes
             }
             return returnFileList;
         }
+
+        private static void CreateDirectories(string filepath)
+        {
+            string[] paths = filepath.Split('\\');
+
+            for (int i = 0; i < (paths.Length-1); i++)
+            {
+                int idxEnd = filepath.IndexOf(paths[i] + "\\") + (paths[i] + "\\").Length;
+                string path = filepath.Substring(0, idxEnd);
+
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+            }
+
+        }
+
     }
 }

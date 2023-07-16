@@ -21,6 +21,7 @@ namespace UtilitiesPilar.Classes
         public string Condition { get; set; }
         public string FileExtension { get; set; }
         public bool UserFolderOriginAux { get; set; }
+        public bool IncludeFolders{ get; set; }
 
         public FileFilterCondition(int id, int fileFilterId)
         {
@@ -28,7 +29,7 @@ namespace UtilitiesPilar.Classes
             FileFilterId = fileFilterId;
         }
 
-        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, string subFolderPath = "")
+        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, string subFolderPath = "", bool includeFolders = false)
         {
             Id = id;
             FileFilterId = fileFilterId;
@@ -37,8 +38,9 @@ namespace UtilitiesPilar.Classes
             Condition = condition;
             FileExtension = fileExtension;
             SubFolderPath = subFolderPath;
+            IncludeFolders = includeFolders;
         }
-        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, bool userFolderOriginAux, string subFolderPath = "")
+        public FileFilterCondition(int id, int fileFilterId, string name, string type, string condition, string fileExtension, bool userFolderOriginAux, string subFolderPath = "", bool includeFolders = false)
         {
             Id = id;
             FileFilterId = fileFilterId;
@@ -48,6 +50,7 @@ namespace UtilitiesPilar.Classes
             FileExtension = fileExtension;
             UserFolderOriginAux = userFolderOriginAux;
             SubFolderPath = subFolderPath;
+            IncludeFolders = includeFolders;
         }
 
         public Dictionary<string, string> SqlKeyValues()
@@ -61,7 +64,8 @@ namespace UtilitiesPilar.Classes
                 {"Condition", "'"+Condition+"'" },
                 {"FileExtension", "'"+FileExtension+"'" },
                 {"UserFolderOriginAux", UserFolderOriginAux ? "true" : "false" },
-                {"SubFolderPath","'"+SubFolderPath+"'" }
+                {"SubFolderPath","'"+SubFolderPath+"'" },
+                {"IncludeFolders", IncludeFolders ? "true" : "false" }
             };
 
             return returnDictionary;

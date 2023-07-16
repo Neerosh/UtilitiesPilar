@@ -53,6 +53,9 @@
             this.txtDescriptionTTDS = new System.Windows.Forms.TextBox();
             this.btUpdateDatabase = new System.Windows.Forms.Button();
             this.gbFilterFiles = new System.Windows.Forms.GroupBox();
+            this.btSelectFolderOriginAux = new System.Windows.Forms.Button();
+            this.txtFolderOriginAux = new System.Windows.Forms.TextBox();
+            this.lbFolderOriginAux = new System.Windows.Forms.Label();
             this.chOverwriteFiles = new System.Windows.Forms.CheckBox();
             this.btFilterFiles = new System.Windows.Forms.Button();
             this.txtZipFilename = new System.Windows.Forms.TextBox();
@@ -66,9 +69,6 @@
             this.btSelectFolderOrigin = new System.Windows.Forms.Button();
             this.txtFolderOrigin = new System.Windows.Forms.TextBox();
             this.lbFolderOrigin = new System.Windows.Forms.Label();
-            this.btSelectFolderOriginAux = new System.Windows.Forms.Button();
-            this.txtFolderOriginAux = new System.Windows.Forms.TextBox();
-            this.lbFolderOriginAux = new System.Windows.Forms.Label();
             this.tlPanel.SuspendLayout();
             this.gbSqlAnywhere.SuspendLayout();
             this.gbTTDS.SuspendLayout();
@@ -404,6 +404,39 @@
             this.gbFilterFiles.TabStop = false;
             this.gbFilterFiles.Text = "Filter Files";
             // 
+            // btSelectFolderOriginAux
+            // 
+            this.btSelectFolderOriginAux.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btSelectFolderOriginAux.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btSelectFolderOriginAux.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btSelectFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btSelectFolderOriginAux.ForeColor = System.Drawing.Color.White;
+            this.btSelectFolderOriginAux.Location = new System.Drawing.Point(565, 49);
+            this.btSelectFolderOriginAux.Name = "btSelectFolderOriginAux";
+            this.btSelectFolderOriginAux.Size = new System.Drawing.Size(32, 26);
+            this.btSelectFolderOriginAux.TabIndex = 20;
+            this.btSelectFolderOriginAux.Text = "...";
+            this.btSelectFolderOriginAux.UseVisualStyleBackColor = false;
+            this.btSelectFolderOriginAux.Click += new System.EventHandler(this.btSelectFolderOriginAux_Click);
+            // 
+            // txtFolderOriginAux
+            // 
+            this.txtFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFolderOriginAux.Location = new System.Drawing.Point(120, 51);
+            this.txtFolderOriginAux.Name = "txtFolderOriginAux";
+            this.txtFolderOriginAux.Size = new System.Drawing.Size(439, 23);
+            this.txtFolderOriginAux.TabIndex = 19;
+            // 
+            // lbFolderOriginAux
+            // 
+            this.lbFolderOriginAux.AutoSize = true;
+            this.lbFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFolderOriginAux.Location = new System.Drawing.Point(9, 55);
+            this.lbFolderOriginAux.Name = "lbFolderOriginAux";
+            this.lbFolderOriginAux.Size = new System.Drawing.Size(107, 15);
+            this.lbFolderOriginAux.TabIndex = 18;
+            this.lbFolderOriginAux.Text = "Folder Origin Aux:";
+            // 
             // chOverwriteFiles
             // 
             this.chOverwriteFiles.AutoSize = true;
@@ -545,39 +578,6 @@
             this.lbFolderOrigin.TabIndex = 4;
             this.lbFolderOrigin.Text = "Folder Origin:";
             // 
-            // btSelectFolderOriginAux
-            // 
-            this.btSelectFolderOriginAux.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btSelectFolderOriginAux.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btSelectFolderOriginAux.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btSelectFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSelectFolderOriginAux.ForeColor = System.Drawing.Color.White;
-            this.btSelectFolderOriginAux.Location = new System.Drawing.Point(565, 49);
-            this.btSelectFolderOriginAux.Name = "btSelectFolderOriginAux";
-            this.btSelectFolderOriginAux.Size = new System.Drawing.Size(32, 26);
-            this.btSelectFolderOriginAux.TabIndex = 20;
-            this.btSelectFolderOriginAux.Text = "...";
-            this.btSelectFolderOriginAux.UseVisualStyleBackColor = false;
-            this.btSelectFolderOriginAux.Click += new System.EventHandler(this.btSelectFolderOriginAux_Click);
-            // 
-            // txtFolderOriginAux
-            // 
-            this.txtFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFolderOriginAux.Location = new System.Drawing.Point(120, 51);
-            this.txtFolderOriginAux.Name = "txtFolderOriginAux";
-            this.txtFolderOriginAux.Size = new System.Drawing.Size(439, 23);
-            this.txtFolderOriginAux.TabIndex = 19;
-            // 
-            // lbFolderOriginAux
-            // 
-            this.lbFolderOriginAux.AutoSize = true;
-            this.lbFolderOriginAux.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbFolderOriginAux.Location = new System.Drawing.Point(9, 55);
-            this.lbFolderOriginAux.Name = "lbFolderOriginAux";
-            this.lbFolderOriginAux.Size = new System.Drawing.Size(107, 15);
-            this.lbFolderOriginAux.TabIndex = 18;
-            this.lbFolderOriginAux.Text = "Folder Origin Aux:";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -638,13 +638,13 @@
         private System.Windows.Forms.ComboBox cbFileFilter;
         private System.Windows.Forms.Label lbFilterSelect;
         private System.Windows.Forms.Button btSelectFolderOrigin;
-        private System.Windows.Forms.TextBox txtFolderOrigin;
         private System.Windows.Forms.Label lbFolderOrigin;
         private System.Windows.Forms.Button btFilterFiles;
         private System.Windows.Forms.CheckBox chOverwriteFiles;
         private System.Windows.Forms.Button btSelectFolderOriginAux;
         private System.Windows.Forms.TextBox txtFolderOriginAux;
         private System.Windows.Forms.Label lbFolderOriginAux;
+        private System.Windows.Forms.TextBox txtFolderOrigin;
     }
 }
 

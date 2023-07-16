@@ -259,8 +259,11 @@ namespace UtilitiesPilar
 
         private void btFilterFiles_Click(object sender, EventArgs e)
         {
+            FileFilterSetting screenFileFilterSetting = new FileFilterSetting(0, (Int32)cbFileFilter.SelectedValue, "Default",
+                    txtFolderOrigin.Text, txtSaveTo.Text, txtZipFilename.Text, chZipFiles.Checked, chOverwriteFiles.Checked, txtFolderOriginAux.Text);
 
-            FileFilterService.FilterFiles(defaultFileFilterSetting, cbFileFilter.SelectedIndex, this);
+
+            FileFilterService.FilterFiles(screenFileFilterSetting, screenFileFilterSetting.FileFilterId, this);
         }
     }
 }
