@@ -5,15 +5,35 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Remoting.Messaging;
 
 namespace UtilitiesPilar.Classes
 {
     public static class FileFilterService
     {
-        public static void FilterFiles(FileFilterSetting fileFilterSetting, int fileFilterId, Form form)
+
+        private static void UpdateProgressBar(Form form, ProgressBar progressBar, double value)
+        {
+            form.Invoke(new Action(() => { 
+                progressBar.Value = (int) value;
+                progressBar.Refresh();
+            }));
+        }
+
+        private static void UpdateLog(Form form, TextBox textBox, string line)
+        {
+            form.Invoke(new Action(() => {
+                textBox.AppendText("\n"+line);
+                textBox.Refresh();
+            }));
+        }
+
+
+        public static void FilterFiles(FileFilterSetting fileFilterSetting, int fileFilterId, ProgressBar progressBar, Form form)
         {
             Task.Run(() => {
 
+                UpdateProgressBar(form, progressBar, 0);
                 Database database = new Database();
                 string returnMessage = "Task executed successfully.";
 
@@ -28,8 +48,13 @@ namespace UtilitiesPilar.Classes
                     List<string> filteredFileList = new List<string>();
                     SearchOption searchOption = SearchOption.TopDirectoryOnly;
 
+                    int conditionCount = 0;
                     foreach (FileFilterCondition condition in fileFilterList)
                     {
+                        conditionCount++;
+                        double valueProgress = (100/fileFilterList.Count()) * conditionCount;
+                        UpdateProgressBar(form, progressBar, valueProgress);
+
                         if (condition.IncludeFolders)
                             searchOption = SearchOption.AllDirectories;
                         else
@@ -49,7 +74,6 @@ namespace UtilitiesPilar.Classes
 
                     if (filteredFileList != null)
                     {
-
                         if (fileFilterSetting.ZipFiles && !String.IsNullOrEmpty(fileFilterSetting.ZipFilename))
                         {
                             string zipFilename = fileFilterSetting.FolderDestination + "\\" +
@@ -82,8 +106,7 @@ namespace UtilitiesPilar.Classes
                                     }
                                 }
                             }
-                        }
-                        
+                        }    
                     }
                     else
                         returnMessage = "None of the files found match this filter.";

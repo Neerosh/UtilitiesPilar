@@ -92,18 +92,18 @@ namespace UtilitiesPilar.Classes
             if (fileFilter != null)
             {
                 fileFilterCondition = new FileFilterCondition(2, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo\\dlls",true);
+                    "AllFilesExcept", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubprocess.exe", "", "TaskToDo\\dlls",true);
                 UpdateFileFilter(fileFilterCondition);
                 fileFilterCondition = new FileFilterCondition(3, fileFilter.Id, "Predefined Condition",
-                    "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubProcess.exe", "", "TaskToDo");
+                    "FilenameExact", "TaskToDo.exe;TaskToDo.exe.config;CefSharp.BrowserSubprocess.exe", "", "TaskToDo");
                 UpdateFileFilter(fileFilterCondition);
 
                 fileFilterCondition = new FileFilterCondition(4, fileFilter.Id, "Predefined Condition",
-                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService\\dlls", true)
+                    "AllFilesExcept", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubprocess.exe", "", "BrainService\\dlls", true)
                 { UserFolderOriginAux = true };
                 UpdateFileFilter(fileFilterCondition);
                 fileFilterCondition = new FileFilterCondition(5, fileFilter.Id, "Predefined Condition",
-                    "FilenameExact", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubProcess.exe", "", "BrainService")
+                    "FilenameExact", "TaskToDoBrainService.exe;TaskToDoBrainService.exe.config;CefSharp.BrowserSubprocess.exe", "", "BrainService")
                 { UserFolderOriginAux = true };
                 UpdateFileFilter(fileFilterCondition);
             }

@@ -69,6 +69,8 @@
             this.btSelectFolderOrigin = new System.Windows.Forms.Button();
             this.txtFolderOrigin = new System.Windows.Forms.TextBox();
             this.lbFolderOrigin = new System.Windows.Forms.Label();
+            this.pgbFilterFiles = new System.Windows.Forms.ProgressBar();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tlPanel.SuspendLayout();
             this.gbSqlAnywhere.SuspendLayout();
             this.gbTTDS.SuspendLayout();
@@ -113,7 +115,7 @@
             this.gbSqlAnywhere.Controls.Add(this.txtDescriptionSqlAnywhere);
             this.gbSqlAnywhere.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.gbSqlAnywhere.ForeColor = System.Drawing.Color.White;
-            this.gbSqlAnywhere.Location = new System.Drawing.Point(39, 194);
+            this.gbSqlAnywhere.Location = new System.Drawing.Point(39, 158);
             this.gbSqlAnywhere.Name = "gbSqlAnywhere";
             this.gbSqlAnywhere.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
             this.gbSqlAnywhere.Size = new System.Drawing.Size(606, 140);
@@ -172,7 +174,7 @@
             this.btStartSqlAnywhere.ForeColor = System.Drawing.Color.White;
             this.btStartSqlAnywhere.Location = new System.Drawing.Point(12, 89);
             this.btStartSqlAnywhere.Name = "btStartSqlAnywhere";
-            this.btStartSqlAnywhere.Size = new System.Drawing.Size(107, 36);
+            this.btStartSqlAnywhere.Size = new System.Drawing.Size(102, 36);
             this.btStartSqlAnywhere.TabIndex = 6;
             this.btStartSqlAnywhere.Text = "Start App";
             this.btStartSqlAnywhere.UseVisualStyleBackColor = false;
@@ -243,7 +245,7 @@
             this.gbTTDS.Controls.Add(this.txtDescriptionTTDS);
             this.gbTTDS.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.gbTTDS.ForeColor = System.Drawing.Color.White;
-            this.gbTTDS.Location = new System.Drawing.Point(39, 48);
+            this.gbTTDS.Location = new System.Drawing.Point(39, 12);
             this.gbTTDS.Name = "gbTTDS";
             this.gbTTDS.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
             this.gbTTDS.Size = new System.Drawing.Size(606, 140);
@@ -304,7 +306,7 @@
             this.btStartTTDS.ForeColor = System.Drawing.Color.White;
             this.btStartTTDS.Location = new System.Drawing.Point(12, 89);
             this.btStartTTDS.Name = "btStartTTDS";
-            this.btStartTTDS.Size = new System.Drawing.Size(107, 36);
+            this.btStartTTDS.Size = new System.Drawing.Size(102, 36);
             this.btStartTTDS.TabIndex = 6;
             this.btStartTTDS.Text = "Start App";
             this.btStartTTDS.UseVisualStyleBackColor = false;
@@ -368,9 +370,9 @@
             this.btUpdateDatabase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btUpdateDatabase.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btUpdateDatabase.ForeColor = System.Drawing.Color.White;
-            this.btUpdateDatabase.Location = new System.Drawing.Point(39, 569);
+            this.btUpdateDatabase.Location = new System.Drawing.Point(39, 606);
             this.btUpdateDatabase.Name = "btUpdateDatabase";
-            this.btUpdateDatabase.Size = new System.Drawing.Size(119, 43);
+            this.btUpdateDatabase.Size = new System.Drawing.Size(114, 43);
             this.btUpdateDatabase.TabIndex = 9;
             this.btUpdateDatabase.Text = "Update Database";
             this.btUpdateDatabase.UseVisualStyleBackColor = false;
@@ -378,6 +380,8 @@
             // 
             // gbFilterFiles
             // 
+            this.gbFilterFiles.Controls.Add(this.textBox1);
+            this.gbFilterFiles.Controls.Add(this.pgbFilterFiles);
             this.gbFilterFiles.Controls.Add(this.btSelectFolderOriginAux);
             this.gbFilterFiles.Controls.Add(this.txtFolderOriginAux);
             this.gbFilterFiles.Controls.Add(this.lbFolderOriginAux);
@@ -396,10 +400,10 @@
             this.gbFilterFiles.Controls.Add(this.lbFolderOrigin);
             this.gbFilterFiles.Font = new System.Drawing.Font("Yu Gothic UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.gbFilterFiles.ForeColor = System.Drawing.Color.White;
-            this.gbFilterFiles.Location = new System.Drawing.Point(39, 340);
+            this.gbFilterFiles.Location = new System.Drawing.Point(39, 304);
             this.gbFilterFiles.Name = "gbFilterFiles";
             this.gbFilterFiles.Padding = new System.Windows.Forms.Padding(6, 3, 6, 6);
-            this.gbFilterFiles.Size = new System.Drawing.Size(606, 223);
+            this.gbFilterFiles.Size = new System.Drawing.Size(606, 296);
             this.gbFilterFiles.TabIndex = 10;
             this.gbFilterFiles.TabStop = false;
             this.gbFilterFiles.Text = "Filter Files";
@@ -457,7 +461,7 @@
             this.btFilterFiles.ForeColor = System.Drawing.Color.White;
             this.btFilterFiles.Location = new System.Drawing.Point(12, 173);
             this.btFilterFiles.Name = "btFilterFiles";
-            this.btFilterFiles.Size = new System.Drawing.Size(107, 36);
+            this.btFilterFiles.Size = new System.Drawing.Size(102, 36);
             this.btFilterFiles.TabIndex = 16;
             this.btFilterFiles.Text = "Filter Files";
             this.btFilterFiles.UseVisualStyleBackColor = false;
@@ -578,6 +582,26 @@
             this.lbFolderOrigin.TabIndex = 4;
             this.lbFolderOrigin.Text = "Folder Origin:";
             // 
+            // pgbFilterFiles
+            // 
+            this.pgbFilterFiles.AccessibleName = "";
+            this.pgbFilterFiles.Location = new System.Drawing.Point(120, 173);
+            this.pgbFilterFiles.Name = "pgbFilterFiles";
+            this.pgbFilterFiles.Size = new System.Drawing.Size(477, 36);
+            this.pgbFilterFiles.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pgbFilterFiles.TabIndex = 21;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(12, 215);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(585, 72);
+            this.textBox1.TabIndex = 22;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -587,7 +611,7 @@
             this.Controls.Add(this.tlPanel);
             this.Font = new System.Drawing.Font("Nirmala UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(600, 600);
+            this.MinimumSize = new System.Drawing.Size(700, 700);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Utilities PILAR";
@@ -645,6 +669,8 @@
         private System.Windows.Forms.TextBox txtFolderOriginAux;
         private System.Windows.Forms.Label lbFolderOriginAux;
         private System.Windows.Forms.TextBox txtFolderOrigin;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ProgressBar pgbFilterFiles;
     }
 }
 

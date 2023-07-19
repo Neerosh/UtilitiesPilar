@@ -21,6 +21,9 @@ namespace UtilitiesPilar
         private ProcessUtil processTTDS = new ProcessUtil();
         private ProcessUtil processSqlAnywhere = new ProcessUtil();
         private Classes.Database database = new Classes.Database();
+
+        public ProgressBar ProgressFilterFiles = new ProgressBar();
+
         public MainForm()
         {
             InitializeComponent();
@@ -28,6 +31,8 @@ namespace UtilitiesPilar
         }
 
         private void InitializeWindow() {
+            ProgressFilterFiles = pgbFilterFiles;
+
             BindingList<FileFilter> fileFiltersList = database.SelectAllFileFilters(null);
 
             cbFileFilter.DataSource = fileFiltersList;
@@ -263,7 +268,7 @@ namespace UtilitiesPilar
                     txtFolderOrigin.Text, txtSaveTo.Text, txtZipFilename.Text, chZipFiles.Checked, chOverwriteFiles.Checked, txtFolderOriginAux.Text);
 
 
-            FileFilterService.FilterFiles(screenFileFilterSetting, screenFileFilterSetting.FileFilterId, this);
+            FileFilterService.FilterFiles(screenFileFilterSetting, screenFileFilterSetting.FileFilterId,pgbFilterFiles, this);
         }
     }
 }
